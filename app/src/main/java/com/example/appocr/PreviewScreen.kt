@@ -58,8 +58,8 @@ fun PreviewScreen(cameraViewModel: CameraViewModel, navController: NavController
     val recognizer =
         TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
     val selectedLabel = remember { mutableStateListOf<String>() }
-//    val CONST_OFFSET = 1.22f
-    val CONST_OFFSET = 1f
+    val CONST_OFFSET = 1.22f
+//    val CONST_OFFSET = 1f
 
     recognizer.process(image).addOnCompleteListener { listBoundingBox = it.result.textBlocks }
 
@@ -99,54 +99,94 @@ fun PreviewScreen(cameraViewModel: CameraViewModel, navController: NavController
             .pointerInput(Unit) {
                 detectTapGestures { offset ->
                     Log.d(TAG, "PreviewScreen: on Tap ${offset.x} ${offset.y}")
-                    listBoundingBox?.forEachIndexed { index, textBlock ->
-                        textBlock.lines.forEach {
-                            it.boundingBox?.apply {
-                                if (offset.x >= left && offset.x <= right &&
-                                    offset.y >= top.times(CONST_OFFSET) && offset.y <= bottom.times(CONST_OFFSET)
-                                ) {
-                                    if (!selectedLabel.contains(it.text)) {
-                                        selectedLabel.add(it.text)
-                                    } else {
-                                        selectedLabel.remove(it.text)
-                                    }
+                    listBoundingBox?.forEachIndexed { index, it ->
+//                        textBlock.lines.forEach {
+//                            it.boundingBox?.apply {
+//                                if (offset.x >= left && offset.x <= right &&
+//                                    offset.y >= top.times(CONST_OFFSET) && offset.y <= bottom.times(CONST_OFFSET)
+//                                ) {
+//                                    if (!selectedLabel.contains(it.text)) {
+//                                        selectedLabel.add(it.text)
+//                                    } else {
+//                                        selectedLabel.remove(it.text)
+//                                    }
+//                                }
+//                            }
+//                        }
+                        it.boundingBox?.apply {
+                            if (offset.x >= left && offset.x <= right &&
+                                offset.y >= top.times(CONST_OFFSET) && offset.y <= bottom.times(CONST_OFFSET)
+                            ) {
+                                if (!selectedLabel.contains(it.text)) {
+                                    selectedLabel.add(it.text)
+                                } else {
+                                    selectedLabel.remove(it.text)
                                 }
                             }
                         }
                     }
                 }
             }, onDraw = {
-            listBoundingBox?.forEachIndexed { index, textBlock ->
-                textBlock.lines.forEach {
-                    it.boundingBox?.apply {
-                        val xRect = it.boundingBox?.left?.toFloat() ?: 0f
+            listBoundingBox?.forEachIndexed { index, it ->
+//                textBlock.lines.forEach {
+//                    it.boundingBox?.apply {
+//                        val xRect = it.boundingBox?.left?.toFloat() ?: 0f
 //                        val yRect = it.boundingBox?.top?.toFloat()?.times(CONST_OFFSET) ?: 0f
-                        val yRect = it.boundingBox?.top?.toFloat()?.times(CONST_OFFSET) ?: 0f
-
+////                        val yRect = it.boundingBox?.top?.toFloat()?.times(CONST_OFFSET) ?: 0f
+//
 //                        val offset = Offset(xRect, yRect)
-                        val offset = Offset(left.toFloat(),top.toFloat())
-                        drawRect(
-                            Color.Green,
-                            offset,
+////                        val offset = Offset(0f,0f)
+//                        drawRect(
+//                            Color.Green,
+//                            offset,
 //                            Size(width().times(CONST_OFFSET), height().times(CONST_OFFSET)),
-                            Size(width().toFloat(), height().toFloat()),
-                            1f,
-                            style = Stroke(2f)
-                        )
+////                            Size(width().toFloat(), height().toFloat()),
+//                            1f,
+//                            style = Stroke(2f)
+//                        )
+//
+//                        val annotText = textMeasure.measure(
+//                            AnnotatedString(
+//                                it.text,
+//                                SpanStyle(
+//                                    fontSize = height().div(2.5).sp,
+//                                    background = if (selectedLabel.contains(it.text)) Color.White.copy(
+//                                        0.45f
+//                                    ) else Color.Transparent
+//                                )
+//                            )
+//                        )
+//                        drawText(annotText, Color.Blue, offset)
+//                    }
+//                }
+                it.boundingBox?.apply {
+                    val xRect = it.boundingBox?.left?.toFloat() ?: 0f
+                    val yRect = it.boundingBox?.top?.toFloat()?.times(CONST_OFFSET) ?: 0f
+//                        val yRect = it.boundingBox?.top?.toFloat()?.times(CONST_OFFSET) ?: 0f
 
-                        val annotText = textMeasure.measure(
-                            AnnotatedString(
-                                it.text,
-                                SpanStyle(
-                                    fontSize = height().div(2.5).sp,
-                                    background = if (selectedLabel.contains(it.text)) Color.White.copy(
-                                        0.45f
-                                    ) else Color.Transparent
-                                )
+                    val offset = Offset(xRect, yRect)
+//                        val offset = Offset(0f,0f)
+                    drawRect(
+                        Color.Green,
+                        offset,
+                        Size(width().times(CONST_OFFSET), height().times(CONST_OFFSET)),
+//                            Size(width().toFloat(), height().toFloat()),
+                        1f,
+                        style = Stroke(2f)
+                    )
+
+                    val annotText = textMeasure.measure(
+                        AnnotatedString(
+                            it.text,
+                            SpanStyle(
+                                fontSize = height().div(2.5).sp,
+                                background = if (selectedLabel.contains(it.text)) Color.White.copy(
+                                    0.45f
+                                ) else Color.Transparent
                             )
                         )
-                        drawText(annotText, Color.Blue, offset)
-                    }
+                    )
+                    drawText(annotText, Color.Blue, offset)
                 }
             }
         })

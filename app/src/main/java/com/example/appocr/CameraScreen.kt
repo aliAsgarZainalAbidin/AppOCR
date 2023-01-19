@@ -98,7 +98,7 @@ fun CameraScreen(
                     try {
                         cameraProvider.apply {
                             unbindAll()
-                            var camera = bindToLifecycle(
+                            bindToLifecycle(
                                 lifecycleOwner,
                                 cameraSelector,
                                 preview,

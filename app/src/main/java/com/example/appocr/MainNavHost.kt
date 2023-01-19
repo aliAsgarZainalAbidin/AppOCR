@@ -36,7 +36,7 @@ fun MainNavHost(
             CameraScreen(cameraViewModel = cameraViewModel, navController)
         }
         composable(Navigation.PreviewScreen.rute){
-            PreviewScreen(cameraViewModel = cameraViewModel, navController = navController)
+            PreviewVisionScreen(cameraViewModel = cameraViewModel, navController = navController)
         }
     }
 }
