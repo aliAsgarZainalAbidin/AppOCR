@@ -21,7 +21,7 @@ android {
             useSupportLibrary true
         }
 //        buildConfigField 'String', 'GOOGLE_APPLICATION_CREDENTIALS', '"C:\\Users\\Ali\\AndroidStudioProjects\\AppOCR\\app\\ocrapplication-375110-804e47cb75c3.json"'
-        buildConfigField "String", "API_KEY", '"AIzaSyDQXqep5j84s73lJxDdXbwceDislb_lS1s"'
+        buildConfigField "String", "API_KEY", "\"" + System.getProperty("API_KEY")  +"\""
     }
 
     signingConfigs {
